@@ -4,7 +4,6 @@ interface Project {
   category: string;
   image: string;
   alt: string;
-  large?: boolean;
 }
 
 interface Props {
@@ -21,65 +20,133 @@ const {
     {
       title: 'Modern Living Space',
       category: 'Interior Design',
-      image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=800&h=1200&fit=crop',
+      image: '/images/project3.jpg',
       alt: 'Modern living room interior',
-      large: true,
     },
     {
       title: 'Elegant Interior',
       category: 'Interior Design',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=800&h=600&fit=crop',
+      image: '/images/project7.jpg',
       alt: 'Elegant interior design',
     },
     {
-      title: 'Contemporary Space',
+      title: 'Office Interior',
       category: 'Interior Design',
-      image: 'https://images.unsplash.com/photo-1600210492493-0946911123ea?w=800&h=600&fit=crop',
-      alt: 'Modern apartment interior',
+      image: '/images/project11.jpg',
+      alt: 'Office interior design',
+    },
+    {
+      title: 'Kitchen Design',
+      category: 'Custom Furniture',
+      image: '/images/project5.jpg',
+      alt: 'Kitchen interior design',
+    },
+    {
+      title: 'Studio Interior',
+      category: 'Architecture Plan',
+      image: '/images/project14.jpg',
+      alt: 'Studio interior design',
+    },
+    {
+      title: 'Home Office',
+      category: 'Interior Design',
+      image: '/images/project9.jpg',
+      alt: 'Home office interior',
+    },
+    {
+      title: 'Living Corner',
+      category: 'Architecture Plan',
+      image: '/images/project2.jpg',
+      alt: 'Living corner interior',
+    },
+    {
+      title: 'Dining Space',
+      category: 'Interior Design',
+      image: '/images/project13.jpg',
+      alt: 'Dining space interior',
     },
   ],
   ctaLabel = 'View All Projects',
 } = Astro.props;
+
+// Split into left and right columns
+const leftProjects = projects.filter((_, i) => i % 2 === 0);
+const rightProjects = projects.filter((_, i) => i % 2 === 1);
+
+// Alternating heights for masonry effect
+const leftHeights = ['h-[500px]', 'h-[350px]', 'h-[420px]', 'h-[380px]'];
+const rightHeights = ['h-[380px]', 'h-[450px]', 'h-[350px]', 'h-[480px]'];
 ---
 
 <section id="projects" class="py-24 bg-white relative overflow-hidden">
   <div class="max-w-7xl mx-auto px-8">
-    <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
-    <h2 class="text-6xl font-bold text-[#3A3A3A] mb-16 leading-tight font-serif" set:html={heading} />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 mb-16">
+      <!-- Left: heading + projects -->
+      <div>
+        <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
+        <h2 class="text-6xl font-bold text-[#3A3A3A] mb-16 leading-tight font-serif" set:html={heading} />
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-      {projects.map((project) => (
-        <div class:list={['group cursor-pointer', { 'row-span-2': project.large }]}>
-          <div
-            class:list={[
-              'relative overflow-hidden rounded-2xl mb-6',
-              project.large ? 'h-[600px] bg-gray-800' : 'h-[288px] bg-gray-200',
-            ]}
-          >
-            <img
-              src={project.image}
-              alt={project.alt}
-              class="w-full h-full object-cover"
-              loading="lazy"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </div>
-          <div class="flex items-start justify-between">
-            <div>
-              <h3 class="text-2xl font-bold text-[#3A3A3A] mb-2 flex items-center">
-                <span class="w-2 h-2 bg-[#C5A572] rounded-full mr-3" />
-                {project.title}
-              </h3>
-              <p class="text-[#6B6B6B]">{project.category}</p>
+        <div class="space-y-12">
+          {leftProjects.map((project, index) => (
+            <div class="group cursor-pointer">
+              <div class={`relative overflow-hidden rounded-2xl mb-6 ${leftHeights[index % leftHeights.length]} bg-gray-100`}>
+                <img
+                  src={project.image}
+                  alt={project.alt}
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              </div>
+              <div class="flex items-start justify-between">
+                <div>
+                  <h3 class="text-2xl font-bold text-[#3A3A3A] mb-2 flex items-center">
+                    <span class="w-2 h-2 bg-[#C5A572] rounded-full mr-3" />
+                    {project.title}
+                  </h3>
+                  <p class="text-[#6B6B6B]">{project.category}</p>
+                </div>
+                <div class="text-[#C5A572] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
+                  <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                  </svg>
+                </div>
+              </div>
             </div>
-            <div class="text-[#C5A572] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
-              <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M7 17L17 7M17 7H7M17 7V17" />
-              </svg>
-            </div>
-          </div>
+          ))}
         </div>
-      ))}
+      </div>
+
+      <!-- Right: projects only (offset down) -->
+      <div class="mt-8 md:mt-24 space-y-12">
+        {rightProjects.map((project, index) => (
+          <div class="group cursor-pointer">
+            <div class={`relative overflow-hidden rounded-2xl mb-6 ${rightHeights[index % rightHeights.length]} bg-gray-100`}>
+              <img
+                src={project.image}
+                alt={project.alt}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </div>
+            <div class="flex items-start justify-between">
+              <div>
+                <h3 class="text-2xl font-bold text-[#3A3A3A] mb-2 flex items-center">
+                  <span class="w-2 h-2 bg-[#C5A572] rounded-full mr-3" />
+                  {project.title}
+                </h3>
+                <p class="text-[#6B6B6B]">{project.category}</p>
+              </div>
+              <div class="text-[#C5A572] group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 17L17 7M17 7H7M17 7V17" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
 
     <button class="bg-gradient-to-r from-[#D4AF37] to-[#C5A572] hover:from-[#C5A572] hover:to-[#D4AF37] text-white px-8 py-4 rounded-full transition-all duration-300 hover:scale-105 flex items-center space-x-2 text-lg shadow-xl">

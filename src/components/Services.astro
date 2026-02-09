@@ -20,19 +20,19 @@ const {
     {
       title: 'Home Decoration',
       description: 'Efficient use of space is crucial in home interior design. Consider the layout of furniture.',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=600&h=800&fit=crop',
+      image: '/images/project4.jpg',
       alt: 'Home Decoration',
     },
     {
       title: 'Hospitality Decor',
       description: 'Efficient use of space is crucial in home interior design. Consider the layout of furniture.',
-      image: 'https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?w=600&h=800&fit=crop',
+      image: '/images/project8.jpg',
       alt: 'Hospitality Decor',
     },
     {
       title: 'Office Space Interior',
       description: 'Efficient use of space is crucial in home interior design. Consider the layout of furniture.',
-      image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=800&fit=crop',
+      image: '/images/project10.jpg',
       alt: 'Office Space Interior',
     },
   ],
@@ -53,10 +53,13 @@ const {
       </button>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      {services.map((service) => (
-        <div class="group cursor-pointer">
-          <div class="relative overflow-hidden rounded-2xl mb-6 h-80 bg-gray-100">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-end">
+      {services.map((service, index) => (
+        <div class:list={['group cursor-pointer', { '-mt-16': index === 1 }]}>
+          <div class:list={[
+            'relative overflow-hidden rounded-2xl mb-6 bg-gray-100',
+            index === 0 ? 'h-[28rem]' : index === 1 ? 'h-[24rem]' : 'h-[30rem]',
+          ]}>
             <img
               src={service.image}
               alt={service.alt}
