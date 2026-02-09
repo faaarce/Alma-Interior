@@ -1,0 +1,97 @@
+---
+interface Props {
+  heading?: string;
+  subheading?: string;
+  ctaLabel?: string;
+  backgroundImage?: string;
+  badgeText?: string;
+}
+
+const {
+  heading = 'Design<br />& Build',
+  subheading = 'Interior Design & Custom Furniture dengan desain modern dan rapi sesuai kebutuhan anda.',
+  ctaLabel = 'Book A Consultation',
+  backgroundImage = 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?w=1920&h=1080&fit=crop',
+  badgeText = '★ Design & Build • 2024 • Design & Build • 2024 •',
+} = Astro.props;
+---
+
+<section id="home" class="relative h-screen flex items-center justify-center overflow-hidden">
+  <!-- Background Image -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src={backgroundImage}
+      alt="Modern interior design"
+      class="w-full h-full object-cover"
+      loading="eager"
+    />
+    <div class="absolute inset-0 bg-black/50"></div>
+  </div>
+
+  <!-- Animated Stars -->
+  <div class="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    {[
+      { top: '10%', left: '20%', delay: '0s', duration: '3s' },
+      { top: '30%', left: '80%', delay: '1s', duration: '4s' },
+      { top: '60%', left: '10%', delay: '2s', duration: '2.5s' },
+      { top: '80%', left: '70%', delay: '0.5s', duration: '3.5s' },
+      { top: '15%', left: '50%', delay: '1.5s', duration: '4s' },
+      { top: '45%', left: '30%', delay: '0.8s', duration: '3s' },
+      { top: '70%', left: '90%', delay: '2.5s', duration: '2s' },
+      { top: '25%', left: '65%', delay: '1.2s', duration: '4.5s' },
+    ].map((star) => (
+      <div
+        class="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+        style={`top: ${star.top}; left: ${star.left}; animation-delay: ${star.delay}; animation-duration: ${star.duration};`}
+      />
+    ))}
+  </div>
+
+  <!-- Content -->
+  <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
+    <!-- Spinning Badge -->
+    <div class="inline-flex items-center justify-center mb-8">
+      <div class="relative w-32 h-32">
+        <svg class="w-full h-full animate-spin-slow" viewBox="0 0 200 200">
+          <defs>
+            <path
+              id="circlePath"
+              d="M 100, 100 m -80, 0 a 80,80 0 1,1 160,0 a 80,80 0 1,1 -160,0"
+            />
+          </defs>
+          <text class="text-[11px] fill-[#D4AF37] font-medium tracking-[0.3em]">
+            <textPath href="#circlePath" startOffset="0">
+              {badgeText}
+            </textPath>
+          </text>
+        </svg>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <div class="w-16 h-16 bg-gradient-to-br from-[#D4AF37]/20 to-[#C5A572]/20 backdrop-blur-sm rounded-full border-2 border-[#D4AF37]/40"></div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="text-6xl md:text-7xl lg:text-8xl font-bold text-white leading-tight mb-6 font-serif" set:html={heading} />
+
+    <p class="text-lg md:text-xl text-[#E8E4DC]/90 mb-10 max-w-2xl mx-auto">
+      {subheading}
+    </p>
+
+    <button class="bg-gradient-to-r from-[#D4AF37] to-[#C5A572] hover:from-[#C5A572] hover:to-[#D4AF37] text-white px-10 py-4 rounded-full transition-all duration-300 hover:scale-105 text-lg font-medium inline-flex items-center gap-2 shadow-2xl">
+      {ctaLabel}
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+      </svg>
+    </button>
+  </div>
+</section>
+
+<style>
+  @keyframes spin-slow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  .animate-spin-slow {
+    animation: spin-slow 20s linear infinite;
+  }
+</style>

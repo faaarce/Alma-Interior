@@ -1,1 +1,14 @@
 @import "tailwindcss";
+
+/* Typography */
+.font-serif {
+  font-family: 'Cormorant Garamond', serif;
+}
+.font-sans {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
