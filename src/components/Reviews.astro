@@ -41,20 +41,26 @@ const {
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
       <!-- Left Side -->
       <div>
-        <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
-        <h2 class="text-5xl font-bold text-[#3A3A3A] mb-12 leading-tight font-serif">{heading}</h2>
+        <div class="rev-reveal">
+          <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
+          <h2 class="text-5xl font-bold text-[#3A3A3A] mb-12 leading-tight font-serif">{heading}</h2>
+        </div>
 
-        <div class="mb-8">
+        <div class="mb-8 rev-reveal" style="transition-delay: 0.2s;">
+          <!-- Big quote mark -->
+          <div class="rev-quote-mark text-[120px] leading-none text-[#C5A572]/20 font-serif select-none -mb-16">"</div>
+
           <div id="reviewContainer">
             {reviews.map((review, index) => (
-              <div class:list={['review-item', { active: index === 0, hidden: index !== 0 }]}>
+              <div class:list={['review-item', { active: index === 0 }]} data-index={index}>
                 <blockquote class="text-2xl text-[#3A3A3A] leading-relaxed font-serif italic mb-8">
-                  "{review.quote}"
+                  {review.quote}
                 </blockquote>
                 <div class="flex items-center space-x-4">
+                  <div class="rev-name-bar w-8 h-[2px] bg-[#C5A572]"></div>
                   <div>
                     <p class="text-xl font-semibold text-[#3A3A3A]">{review.name}</p>
-                    <p class="text-[#C5A572]">{review.location}</p>
+                    <p class="text-[#C5A572] text-sm">{review.location}</p>
                   </div>
                 </div>
               </div>
@@ -62,23 +68,34 @@ const {
           </div>
         </div>
 
-        <!-- Navigation -->
-        <div class="flex items-center space-x-4">
+        <!-- Navigation + Progress -->
+        <div class="flex items-center space-x-4 rev-reveal" style="transition-delay: 0.4s;">
           <button
             id="prevReview"
             aria-label="Previous review"
-            class="w-12 h-12 rounded-full bg-[#3A3A3A]/10 hover:bg-[#3A3A3A]/20 flex items-center justify-center transition-all duration-300"
+            class="rev-nav-btn w-12 h-12 rounded-full bg-[#3A3A3A]/10 hover:bg-[#C5A572] flex items-center justify-center transition-all duration-300 group"
           >
-            <svg class="w-6 h-6 text-[#3A3A3A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="w-5 h-5 text-[#3A3A3A] group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M19 12H5M5 12l7-7M5 12l7 7" />
             </svg>
           </button>
+
+          <!-- Progress dots -->
+          <div class="flex items-center space-x-2">
+            {reviews.map((_, index) => (
+              <div
+                class:list={['rev-dot w-2 h-2 rounded-full transition-all duration-500', { 'bg-[#C5A572] w-6': index === 0, 'bg-[#3A3A3A]/20': index !== 0 }]}
+                data-dot={index}
+              />
+            ))}
+          </div>
+
           <button
             id="nextReview"
             aria-label="Next review"
-            class="w-12 h-12 rounded-full bg-[#3A3A3A]/10 hover:bg-[#3A3A3A]/20 flex items-center justify-center transition-all duration-300"
+            class="rev-nav-btn w-12 h-12 rounded-full bg-[#3A3A3A]/10 hover:bg-[#C5A572] flex items-center justify-center transition-all duration-300 group"
           >
-            <svg class="w-6 h-6 text-[#3A3A3A]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg class="w-5 h-5 text-[#3A3A3A] group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M19 12l-7-7M19 12l-7 7" />
             </svg>
           </button>
@@ -86,15 +103,17 @@ const {
       </div>
 
       <!-- Right Side Image -->
-      <div class="relative">
-        <div class="rounded-2xl overflow-hidden shadow-2xl">
+      <div class="relative rev-reveal rev-image-wrap" style="transition-delay: 0.3s;">
+        <div class="rounded-2xl overflow-hidden shadow-2xl rev-image-clip">
           <img
             src={sideImage}
             alt="Modern interior space"
-            class="w-full h-[600px] object-cover"
+            class="w-full h-[600px] object-cover rev-image-zoom"
             loading="lazy"
           />
         </div>
+        <!-- Floating gold frame accent -->
+        <div class="rev-frame absolute -top-4 -right-4 w-full h-full rounded-2xl border-2 border-[#C5A572]/20 pointer-events-none"></div>
         <div class="absolute -top-6 -right-6 w-32 h-32 bg-[#D4AF37] rounded-full opacity-10 blur-3xl" />
         <div class="absolute -bottom-6 -left-6 w-40 h-40 bg-[#C5A572] rounded-full opacity-10 blur-3xl" />
       </div>
@@ -102,7 +121,7 @@ const {
   </div>
 
   <!-- Decorative star -->
-  <div class="absolute top-20 left-20 w-12 h-12 opacity-10">
+  <div class="absolute top-20 left-20 w-12 h-12 opacity-10 rev-star">
     <svg viewBox="0 0 24 24" class="w-full h-full text-[#D4AF37]" fill="currentColor">
       <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" />
     </svg>
@@ -112,42 +131,217 @@ const {
 <style>
   #reviewContainer {
     position: relative;
-    min-height: 300px;
+    min-height: 280px;
+    overflow: hidden;
   }
+
+  /* Quote slide animation */
   .review-item {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    transition: opacity 0.5s ease;
+    opacity: 0;
+    transform: translateX(80px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    pointer-events: none;
+  }
+  .review-item.active {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+  .review-item.exit-left {
+    opacity: 0;
+    transform: translateX(-80px);
+  }
+
+  /* Big quote mark float */
+  .rev-quote-mark {
+    animation: quote-float 4s ease-in-out infinite;
+  }
+  @keyframes quote-float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  /* Scroll reveal */
+  .rev-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .rev-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Image clip-path reveal */
+  .rev-image-clip {
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  .visible .rev-image-clip {
+    clip-path: inset(0 0 0 0);
+  }
+
+  /* Image slow zoom */
+  .rev-image-zoom {
+    transform: scale(1.1);
+    transition: transform 8s ease-out;
+  }
+  .visible .rev-image-zoom {
+    transform: scale(1);
+  }
+
+  /* Gold frame slide in */
+  .rev-frame {
+    opacity: 0;
+    transform: translate(20px, -20px);
+    transition: opacity 0.8s ease-out 0.6s, transform 0.8s ease-out 0.6s;
+  }
+  .visible .rev-frame {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  /* Nav buttons */
+  .rev-nav-btn {
+    position: relative;
+    overflow: hidden;
+  }
+  .rev-nav-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle, rgba(197,165,114,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    border-radius: 50%;
+  }
+  .rev-nav-btn:active::after {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  /* Name bar grow */
+  .rev-name-bar {
+    transition: width 0.4s ease;
+  }
+  .review-item.active .rev-name-bar {
+    animation: bar-grow 0.6s ease-out 0.3s both;
+  }
+  @keyframes bar-grow {
+    0% { width: 0; }
+    100% { width: 2rem; }
+  }
+
+  /* Decorative star spin */
+  .rev-star {
+    animation: star-spin 20s linear infinite;
+  }
+  @keyframes star-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
   }
 </style>
 
 <script>
   let currentReview = 0;
-  const reviews = document.querySelectorAll('.review-item');
+  let isAnimating = false;
+  const reviews = document.querySelectorAll<HTMLElement>('.review-item');
+  const dots = document.querySelectorAll<HTMLElement>('[data-dot]');
   const prevBtn = document.getElementById('prevReview');
   const nextBtn = document.getElementById('nextReview');
 
-  function showReview(index: number) {
-    reviews.forEach((review, i) => {
+  function updateDots(index: number) {
+    dots.forEach((dot, i) => {
       if (i === index) {
-        review.classList.remove('hidden');
-        review.classList.add('active');
+        dot.classList.add('bg-[#C5A572]', 'w-6');
+        dot.classList.remove('bg-[#3A3A3A]/20');
       } else {
-        review.classList.add('hidden');
-        review.classList.remove('active');
+        dot.classList.remove('bg-[#C5A572]', 'w-6');
+        dot.classList.add('bg-[#3A3A3A]/20');
       }
     });
   }
 
+  function showReview(newIndex: number, direction: 'left' | 'right') {
+    if (isAnimating || newIndex === currentReview) return;
+    isAnimating = true;
+
+    const oldItem = reviews[currentReview];
+    const newItem = reviews[newIndex];
+
+    // Old exits
+    oldItem.classList.remove('active');
+    if (direction === 'left') oldItem.classList.add('exit-left');
+
+    // New enters: position offscreen
+    newItem.style.transition = 'none';
+    newItem.style.transform = direction === 'left' ? 'translateX(80px)' : 'translateX(-80px)';
+    newItem.style.opacity = '0';
+
+    // Force reflow
+    void newItem.offsetWidth;
+
+    // Animate in — clear inline styles so .active class takes over
+    newItem.style.transition = '';
+    newItem.style.transform = '';
+    newItem.style.opacity = '';
+    newItem.classList.add('active');
+
+    updateDots(newIndex);
+    currentReview = newIndex;
+
+    setTimeout(() => {
+      oldItem.classList.remove('exit-left');
+      isAnimating = false;
+    }, 600);
+  }
+
   prevBtn?.addEventListener('click', () => {
-    currentReview = (currentReview - 1 + reviews.length) % reviews.length;
-    showReview(currentReview);
+    const newIndex = (currentReview - 1 + reviews.length) % reviews.length;
+    showReview(newIndex, 'right');
   });
 
   nextBtn?.addEventListener('click', () => {
-    currentReview = (currentReview + 1) % reviews.length;
-    showReview(currentReview);
+    const newIndex = (currentReview + 1) % reviews.length;
+    showReview(newIndex, 'left');
   });
+
+  // Auto-play
+  let autoPlay: ReturnType<typeof setInterval> | null = null;
+
+  const sectionObs = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          autoPlay = setInterval(() => {
+            const newIndex = (currentReview + 1) % reviews.length;
+            showReview(newIndex, 'left');
+          }, 5000);
+        } else {
+          if (autoPlay) { clearInterval(autoPlay); autoPlay = null; }
+        }
+      });
+    },
+    { threshold: 0.3 }
+  );
+
+  const section = document.getElementById('reviews');
+  if (section) sectionObs.observe(section);
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  document.querySelectorAll('#reviews .rev-reveal').forEach((el) => observer.observe(el));
 </script>

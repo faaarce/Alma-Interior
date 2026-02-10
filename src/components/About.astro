@@ -32,10 +32,10 @@ const {
     { value: '1K+', label: 'Proyek Terselesaikan', description: 'Interior & furniture berkualitas sejak tahun 2005.' },
     { value: '20+', label: 'Tahun Pengalaman', description: 'Mendesain ruang dengan detail dan perhatian penuh.' },
     { value: '95%', label: 'Kepuasan Klien', description: 'Kualitas terpercaya dengan hasil akhir yang rapi.' },
-    { value: 'H', label: 'Beragam Proyek', description: 'Rumah, kantor, klinik, universitas, RS & lainnya.' },
+    { value: 'R&K', label: 'Beragam Proyek', description: 'Rumah, kantor, klinik, universitas, RS & lainnya.' },
   ],
   galleryImages = [
-     { src: '/images/project1.jpg', alt: 'Interior project 1', widthClass: 'w-64', heightClass: 'h-96' },
+    { src: '/images/project1.jpg', alt: 'Interior project 1', widthClass: 'w-64', heightClass: 'h-96' },
     { src: '/images/project5.jpg', alt: 'Interior project 5', widthClass: 'w-[28rem]', heightClass: 'h-80' },
     { src: '/images/project9.jpg', alt: 'Interior project 9', widthClass: 'w-72', heightClass: 'h-[28rem]' },
     { src: '/images/project2.jpg', alt: 'Interior project 2', widthClass: 'w-80', heightClass: 'h-72' },
@@ -48,34 +48,36 @@ const {
   <div class="max-w-7xl mx-auto px-8 relative z-10">
     <!-- Header -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-16 mb-16">
-      <div>
+      <div class="reveal">
         <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
         <h2 class="text-6xl font-bold text-[#3A3A3A] leading-tight font-serif" set:html={heading} />
       </div>
-      <div class="flex flex-col justify-center">
+      <div class="flex flex-col justify-center reveal" style="transition-delay: 0.2s;">
         {paragraphs.map((text) => (
           <p class="text-xl text-[#6B6B6B] mb-6 last:mb-0">{text}</p>
         ))}
       </div>
     </div>
 
-    <!-- Scrolling Gallery -->
-    <div class="overflow-hidden mb-20">
-      <div class="flex items-end space-x-6 animate-scroll">
-        {/* Original + duplicate for seamless loop */}
-        {[...galleryImages, ...galleryImages.slice(0, 3)].map((img) => (
-          <div class={`flex-shrink-0 ${img.widthClass} ${img.heightClass} rounded-2xl overflow-hidden shadow-lg`}>
-            <img src={img.src} alt={img.alt} class="w-full h-full object-cover" loading="lazy" />
-          </div>
-        ))}
-      </div>
-    </div>
+  </div>
 
-    <!-- Statistics -->
+  <!-- Scrolling Gallery (full width, always moving) -->
+  <div class="overflow-hidden mb-20">
+    <div class="flex items-end space-x-6 animate-scroll">
+      {[...galleryImages, ...galleryImages.slice(0, 3)].map((img) => (
+        <div class={`flex-shrink-0 ${img.widthClass} ${img.heightClass} rounded-2xl overflow-hidden shadow-lg`}>
+          <img src={img.src} alt={img.alt} class="w-full h-full object-cover" loading="lazy" />
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Statistics -->
+  <div class="max-w-7xl mx-auto px-8">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-12">
-      {stats.map((stat) => (
-        <div class="text-center">
-          <h3 class="text-6xl font-bold text-[#3A3A3A] mb-4">{stat.value}</h3>
+      {stats.map((stat, index) => (
+        <div class="text-center reveal" style={`transition-delay: ${0.1 * index}s;`}>
+          <h3 class="text-6xl font-bold text-[#3A3A3A] mb-4 counter" data-target={stat.value}>0</h3>
           <p class="text-xl font-semibold text-[#3A3A3A] mb-2">{stat.label}</p>
           <p class="text-[#6B6B6B]">{stat.description}</p>
         </div>
@@ -95,4 +97,74 @@ const {
   .animate-scroll:hover {
     animation-play-state: paused;
   }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    { threshold: 0.15 }
+  );
+
+  document.querySelectorAll('#about .reveal').forEach((el) => observer.observe(el));
+
+  // Counter animation
+  function animateCounter(el: HTMLElement) {
+    const target = el.dataset.target || '0';
+    // Extract the numeric part and any prefix/suffix (e.g. "1K+" → num=1, suffix="K+")
+    const match = target.match(/^(\d+)(.*)/);
+    if (!match) {
+      el.textContent = target;
+      return;
+    }
+
+    const endNum = parseInt(match[1]);
+    const suffix = match[2] || '';
+    const duration = 2000;
+    const startTime = performance.now();
+
+    function update(currentTime: number) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      const current = Math.round(eased * endNum);
+      el.textContent = current + suffix;
+
+      if (progress < 1) {
+        requestAnimationFrame(update);
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  const counterObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          animateCounter(entry.target as HTMLElement);
+          counterObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.5 }
+  );
+
+  document.querySelectorAll('#about .counter').forEach((el) => counterObserver.observe(el));
+</script>

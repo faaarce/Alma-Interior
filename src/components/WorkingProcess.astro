@@ -50,40 +50,195 @@ const {
 ---
 
 <section id="process" class="py-24 bg-gradient-to-br from-[#2C2C2C] via-[#1C1C1C] to-[#2C2C2C] relative overflow-hidden">
-  <div class="max-w-7xl mx-auto px-8">
+  <!-- Floating decorative elements -->
+  <div class="proc-float absolute top-20 right-20 w-64 h-64 border border-[#C5A572]/5 rounded-full"></div>
+  <div class="proc-float-reverse absolute bottom-32 left-16 w-40 h-40 border border-[#C5A572]/5 rounded-full"></div>
+
+  <div class="max-w-7xl mx-auto px-8 relative z-10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-x-16 gap-y-16">
-      <!-- Heading (takes first column, spans 2 rows) -->
-      <div class="md:row-span-2">
-        <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4">{sectionLabel}</p>
-        <h2 class="text-6xl font-bold text-white leading-tight font-serif" set:html={heading} />
+      <!-- Heading -->
+      <div class="md:row-span-2 proc-reveal">
+        <p class="text-sm text-[#C5A572] font-semibold tracking-wider mb-4 proc-label">{sectionLabel}</p>
+        <h2 class="text-6xl font-bold text-white leading-tight font-serif proc-heading" set:html={heading} />
+        <!-- Decorative line under heading -->
+        <div class="proc-line mt-8 h-[2px] w-0 bg-gradient-to-r from-[#C5A572] to-transparent"></div>
       </div>
 
       <!-- Steps row 1: 01 & 02 -->
-      {steps.slice(0, 2).map((step) => (
-        <div class="group">
-          <p class="text-sm text-[#C5A572] font-semibold mb-6">{step.number}</p>
-          <h3 class="text-2xl font-bold text-white mb-4 font-serif">{step.title}</h3>
+      {steps.slice(0, 2).map((step, i) => (
+        <div class="group proc-step" style={`transition-delay: ${0.2 + i * 0.15}s;`}>
+          <div class="relative mb-6">
+            <p class="proc-number text-6xl font-bold text-[#C5A572]/10 font-serif leading-none">{step.number}</p>
+            <p class="proc-number-small absolute top-1/2 left-0 -translate-y-1/2 text-sm text-[#C5A572] font-semibold">{step.number}</p>
+          </div>
+          <div class="proc-step-line mb-6 h-[1px] w-0 bg-white/10"></div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-serif group-hover:text-[#C5A572] transition-colors duration-300">{step.title}</h3>
           <p class="text-white/60 leading-relaxed">{step.description}</p>
         </div>
       ))}
 
       <!-- Steps row 2: 03 & 04 -->
-      {steps.slice(2, 4).map((step) => (
-        <div class="group">
-          <p class="text-sm text-[#C5A572] font-semibold mb-6">{step.number}</p>
-          <h3 class="text-2xl font-bold text-white mb-4 font-serif">{step.title}</h3>
+      {steps.slice(2, 4).map((step, i) => (
+        <div class="group proc-step" style={`transition-delay: ${0.5 + i * 0.15}s;`}>
+          <div class="relative mb-6">
+            <p class="proc-number text-6xl font-bold text-[#C5A572]/10 font-serif leading-none">{step.number}</p>
+            <p class="proc-number-small absolute top-1/2 left-0 -translate-y-1/2 text-sm text-[#C5A572] font-semibold">{step.number}</p>
+          </div>
+          <div class="proc-step-line mb-6 h-[1px] w-0 bg-white/10"></div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-serif group-hover:text-[#C5A572] transition-colors duration-300">{step.title}</h3>
           <p class="text-white/60 leading-relaxed">{step.description}</p>
         </div>
       ))}
 
       <!-- Steps row 3: 05 & 06 -->
-      {steps.slice(4).map((step) => (
-        <div class="group">
-          <p class="text-sm text-[#C5A572] font-semibold mb-6">{step.number}</p>
-          <h3 class="text-2xl font-bold text-white mb-4 font-serif">{step.title}</h3>
+      {steps.slice(4).map((step, i) => (
+        <div class="group proc-step" style={`transition-delay: ${0.8 + i * 0.15}s;`}>
+          <div class="relative mb-6">
+            <p class="proc-number text-6xl font-bold text-[#C5A572]/10 font-serif leading-none">{step.number}</p>
+            <p class="proc-number-small absolute top-1/2 left-0 -translate-y-1/2 text-sm text-[#C5A572] font-semibold">{step.number}</p>
+          </div>
+          <div class="proc-step-line mb-6 h-[1px] w-0 bg-white/10"></div>
+          <h3 class="text-2xl font-bold text-white mb-4 font-serif group-hover:text-[#C5A572] transition-colors duration-300">{step.title}</h3>
           <p class="text-white/60 leading-relaxed">{step.description}</p>
         </div>
       ))}
     </div>
   </div>
 </section>
+
+<style>
+  /* Heading reveal */
+  .proc-reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+  .proc-reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Label tracking */
+  .proc-label {
+    letter-spacing: 0.4em;
+    transition: letter-spacing 1.2s ease-out 0.2s;
+  }
+  .visible .proc-label {
+    letter-spacing: 0.15em;
+  }
+
+  /* Heading text clip reveal */
+  .proc-heading {
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 1s cubic-bezier(0.77, 0, 0.175, 1) 0.3s;
+  }
+  .visible .proc-heading {
+    clip-path: inset(0 0% 0 0);
+  }
+
+  /* Decorative line grow */
+  .proc-line {
+    transition: width 0.8s ease-out 0.8s;
+  }
+  .visible .proc-line {
+    width: 80%;
+  }
+
+  /* Step card reveal */
+  .proc-step {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+  }
+  .proc-step.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Big ghost number */
+  .proc-number {
+    transform: translateX(-10px);
+    opacity: 0;
+    transition: transform 0.6s ease-out 0.2s, opacity 0.6s ease-out 0.2s;
+  }
+  .visible .proc-number {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  /* Small number slide in */
+  .proc-number-small {
+    transform: translateX(-20px);
+    opacity: 0;
+    transition: transform 0.5s ease-out 0.5s, opacity 0.5s ease-out 0.5s;
+  }
+  .visible .proc-number-small {
+    transform: translate(0, -50%);
+    opacity: 1;
+  }
+
+  /* Step divider line grow */
+  .proc-step-line {
+    transition: width 0.6s ease-out 0.4s;
+  }
+  .visible .proc-step-line {
+    width: 100%;
+  }
+
+  /* Step hover lift */
+  .proc-step.visible {
+    position: relative;
+  }
+  .proc-step.visible:hover {
+    transform: translateY(-6px);
+    transition: transform 0.3s ease;
+  }
+
+  /* Step left glow bar on hover */
+  .proc-step::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 0;
+    background: linear-gradient(to bottom, #C5A572, transparent);
+    transition: height 0.4s ease;
+  }
+  .proc-step:hover::before {
+    height: 100%;
+  }
+
+  /* Floating circles */
+  .proc-float {
+    animation: proc-drift 15s ease-in-out infinite;
+  }
+  .proc-float-reverse {
+    animation: proc-drift-reverse 12s ease-in-out infinite;
+  }
+  @keyframes proc-drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-20px, 15px) scale(1.05); }
+    66% { transform: translate(10px, -10px) scale(0.95); }
+  }
+  @keyframes proc-drift-reverse {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(15px, -20px) scale(0.95); }
+    66% { transform: translate(-10px, 10px) scale(1.05); }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    },
+    { threshold: 0.1 }
+  );
+
+  document.querySelectorAll('#process .proc-reveal, #process .proc-step').forEach((el) => observer.observe(el));
+</script>
