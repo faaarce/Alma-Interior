@@ -50,11 +50,11 @@ const {
 
 <header
   id="header"
-  class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 w-full max-w-6xl px-4"
+  class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-full max-w-6xl px-4"
 >
   <div
     id="headerInner"
-    class="bg-white/10 backdrop-blur-lg rounded-full shadow-lg border border-white/20 px-8 py-4 transition-all duration-300"
+    class="header-dark bg-white/10 backdrop-blur-lg rounded-full shadow-lg border border-white/20 px-8 py-4 transition-all duration-500"
   >
     <div class="flex justify-between items-center">
       <!-- Logo -->
@@ -64,14 +64,14 @@ const {
             <path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z" />
           </svg>
         </div>
-        <span class="text-xl font-bold text-white tracking-wider">ALMA INTERIOR</span>
+        <span class="header-logo-text text-xl font-bold tracking-wider transition-colors duration-500 text-white">ALMA INTERIOR</span>
       </a>
 
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-8">
         <!-- All Pages Dropdown -->
         <div class="relative group">
-          <button class="text-white/80 hover:text-white transition flex items-center gap-1 text-sm font-medium">
+          <button class="header-nav-link transition-colors duration-500 text-white/80 hover:text-white flex items-center gap-1 text-sm font-medium">
             All Pages
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
@@ -111,7 +111,7 @@ const {
         {navLinks.map((link) => (
           <a
             href={link.href}
-            class="text-white/80 hover:text-white transition-colors text-sm font-medium"
+            class="header-nav-link transition-colors duration-500 text-white/80 hover:text-white text-sm font-medium"
           >
             {link.label}
           </a>
@@ -128,19 +128,75 @@ const {
   </div>
 </header>
 
+<style>
+  /* Dark sections (Hero, WorkingProcess, CTA) — white text */
+  .header-dark {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Light sections (About, Projects, Services, Reviews) — dark text */
+  .header-light {
+    background: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .header-light .header-logo-text {
+    color: #3A3A3A !important;
+  }
+  .header-light .header-nav-link {
+    color: rgba(58, 58, 58, 0.7) !important;
+  }
+  .header-light .header-nav-link:hover {
+    color: #3A3A3A !important;
+  }
+</style>
+
 <script>
   const headerInner = document.getElementById('headerInner');
 
+  // Sections with light backgrounds where header text should be dark
+  const lightSections = ['about', 'projects', 'services', 'reviews'];
+
   function updateHeader() {
     if (!headerInner) return;
-    if (window.scrollY > 100) {
-      headerInner.classList.remove('bg-white/10', 'backdrop-blur-lg', 'shadow-lg');
-      headerInner.classList.add('bg-white/20', 'backdrop-blur-xl', 'shadow-2xl');
+
+    // Check which section the header is currently overlapping
+    const headerRect = headerInner.getBoundingClientRect();
+    const headerMid = headerRect.top + headerRect.height / 2;
+
+    let isOverLight = false;
+
+    for (const id of lightSections) {
+      const section = document.getElementById(id);
+      if (!section) continue;
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= headerMid && rect.bottom >= headerMid) {
+        isOverLight = true;
+        break;
+      }
+    }
+
+    if (isOverLight) {
+      headerInner.classList.add('header-light');
+      headerInner.classList.remove('header-dark');
     } else {
-      headerInner.classList.remove('bg-white/20', 'backdrop-blur-xl', 'shadow-2xl');
-      headerInner.classList.add('bg-white/10', 'backdrop-blur-lg', 'shadow-lg');
+      headerInner.classList.remove('header-light');
+      headerInner.classList.add('header-dark');
+    }
+
+    // Extra blur on scroll
+    if (window.scrollY > 100) {
+      headerInner.classList.add('shadow-2xl');
+    } else {
+      headerInner.classList.remove('shadow-2xl');
     }
   }
 
-  window.addEventListener('scroll', updateHeader);
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('resize', updateHeader, { passive: true });
+  // Run on load
+  updateHeader();
 </script>
