@@ -50,16 +50,16 @@ const {
 
 <header
   id="header"
-  class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-500 w-full max-w-6xl px-4"
+  class="fixed top-6 left-0 right-0 z-50 w-full max-w-6xl mx-auto px-4 hdr-entrance"
 >
   <div
     id="headerInner"
-    class="header-dark bg-white/10 backdrop-blur-lg rounded-full shadow-lg border border-white/20 px-8 py-4 transition-all duration-500"
+    class="header-dark backdrop-blur-lg rounded-full shadow-lg border px-8 py-4 transition-all duration-500"
   >
     <div class="flex justify-between items-center">
       <!-- Logo -->
-      <a href="/" class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-full overflow-hidden">
+      <a href="/" class="flex items-center gap-3 hdr-item" style="--delay: 0.1s;">
+        <div class="w-10 h-10 rounded-full overflow-hidden hdr-logo">
           <img src="/images/alma.png" alt="Alma Interior" class="w-full h-full object-cover" />
         </div>
         <span class="header-logo-text text-xl font-bold tracking-wider transition-colors duration-500 text-white">ALMA INTERIOR</span>
@@ -68,21 +68,21 @@ const {
       <!-- Navigation -->
       <nav class="hidden md:flex items-center space-x-8">
         <!-- All Pages Dropdown -->
-        <div class="relative group">
-          <button class="header-nav-link transition-colors duration-500 text-white/80 hover:text-white flex items-center gap-1 text-sm font-medium">
+        <div class="relative group hdr-item" style="--delay: 0.25s;">
+          <button class="header-nav-link transition-colors duration-500 text-white/80 hover:text-white flex items-center gap-1 text-sm font-medium hdr-nav-hover">
             All Pages
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4 hdr-chevron transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
             </svg>
           </button>
           <div class="absolute top-full left-0 mt-6 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 w-[600px]">
+            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100 w-[600px] hdr-dropdown">
               <div class="flex">
-                <div class="w-48 bg-gradient-to-br from-slate-100 to-slate-200 flex-shrink-0">
+                <div class="w-48 bg-gradient-to-br from-slate-100 to-slate-200 flex-shrink-0 overflow-hidden">
                   <img
-                    src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?w=400&h=400&fit=crop"
+                    src="/images/project1.jpg"
                     alt="Interior preview"
-                    class="w-full h-full object-cover"
+                    class="w-full h-full object-cover hdr-dropdown-img"
                   />
                 </div>
                 <div class="flex-1 p-8">
@@ -92,7 +92,7 @@ const {
                         {column.map((link) => (
                           <a
                             href={link.href}
-                            class="block text-teal-900 hover:text-[#C5A572] font-medium text-sm transition-colors"
+                            class="hdr-dropdown-link block text-[#3A3A3A] hover:text-[#C5A572] font-medium text-sm transition-all duration-300"
                           >
                             {link.label}
                           </a>
@@ -106,10 +106,11 @@ const {
           </div>
         </div>
 
-        {navLinks.map((link) => (
+        {navLinks.map((link, i) => (
           <a
             href={link.href}
-            class="header-nav-link transition-colors duration-500 text-white/80 hover:text-white text-sm font-medium"
+            class="header-nav-link hdr-item hdr-nav-hover transition-colors duration-500 text-white/80 hover:text-white text-sm font-medium"
+            style={`--delay: ${0.35 + i * 0.1}s;`}
           >
             {link.label}
           </a>
@@ -117,9 +118,10 @@ const {
       </nav>
 
       <!-- CTA -->
-      <div>
-        <button class="bg-gradient-to-r from-[#D4AF37] to-[#C5A572] hover:from-[#C5A572] hover:to-[#D4AF37] text-white px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 font-medium shadow-lg text-sm">
-          {ctaLabel}
+      <div class="hdr-item" style="--delay: 0.55s;">
+        <button class="hdr-cta bg-gradient-to-r from-[#D4AF37] to-[#C5A572] hover:from-[#C5A572] hover:to-[#D4AF37] text-white px-6 py-2.5 rounded-full transition-all duration-300 hover:scale-105 font-medium shadow-lg text-sm relative overflow-hidden">
+          <span class="relative z-10">{ctaLabel}</span>
+          <div class="hdr-cta-shimmer absolute inset-0"></div>
         </button>
       </div>
     </div>
@@ -127,20 +129,59 @@ const {
 </header>
 
 <style>
-  /* Dark sections (Hero, WorkingProcess, CTA) — white text */
+  /* ===== ENTRANCE ANIMATION ===== */
+  .hdr-entrance {
+    animation: hdr-slide-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes hdr-slide-down {
+    0% {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Staggered children */
+  .hdr-item {
+    opacity: 0;
+    animation: hdr-fade-in 0.6s ease-out forwards;
+    animation-delay: var(--delay, 0s);
+  }
+  @keyframes hdr-fade-in {
+    0% {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Logo hover spin */
+  .hdr-logo {
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .hdr-logo:hover {
+    transform: rotate(360deg);
+  }
+
+  /* ===== DARK MODE (Hero, WorkingProcess, CTA) ===== */
   .header-dark {
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.2);
   }
 
-  /* Light sections (About, Projects, Services, Reviews) — dark text */
+  /* ===== LIGHT MODE (About, Projects, Services, Reviews) ===== */
   .header-light {
-    background: rgba(255, 255, 255, 0.85) !important;
+    background: rgba(255, 255, 255, 0.88) !important;
     backdrop-filter: blur(20px) !important;
-    border-color: rgba(0, 0, 0, 0.08) !important;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.06) !important;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.06) !important;
   }
-
   .header-light .header-logo-text {
     color: #3A3A3A !important;
   }
@@ -150,18 +191,158 @@ const {
   .header-light .header-nav-link:hover {
     color: #3A3A3A !important;
   }
+
+  /* ===== NAV LINK HOVER UNDERLINE ===== */
+  .hdr-nav-hover {
+    position: relative;
+  }
+  .hdr-nav-hover::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #C5A572;
+    transition: width 0.3s ease, left 0.3s ease;
+    border-radius: 1px;
+  }
+  .hdr-nav-hover:hover::after {
+    width: 100%;
+    left: 0;
+  }
+
+  /* Chevron rotate on hover */
+  .group:hover .hdr-chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ===== DROPDOWN ANIMATIONS ===== */
+  .hdr-dropdown {
+    transform-origin: top left;
+    animation: none;
+  }
+  .group:hover .hdr-dropdown {
+    animation: hdr-dropdown-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes hdr-dropdown-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.95) translateY(8px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  /* Dropdown image slow zoom */
+  .hdr-dropdown-img {
+    transition: transform 4s ease-out;
+  }
+  .group:hover .hdr-dropdown-img {
+    transform: scale(1.1);
+  }
+
+  /* Dropdown links hover slide */
+  .hdr-dropdown-link {
+    position: relative;
+    padding-left: 0;
+    transition: padding-left 0.3s ease, color 0.3s ease;
+  }
+  .hdr-dropdown-link::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 0;
+    height: 1.5px;
+    background: #C5A572;
+    transition: width 0.3s ease;
+    transform: translateY(-50%);
+  }
+  .hdr-dropdown-link:hover {
+    padding-left: 14px;
+  }
+  .hdr-dropdown-link:hover::before {
+    width: 10px;
+  }
+
+  /* ===== CTA SHIMMER ===== */
+  .hdr-cta-shimmer {
+    background: linear-gradient(
+      105deg,
+      transparent 40%,
+      rgba(255, 255, 255, 0.25) 50%,
+      transparent 60%
+    );
+    background-size: 200% 100%;
+    animation: hdr-shimmer 3s ease-in-out infinite;
+  }
+  @keyframes hdr-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  /* CTA ripple on click */
+  .hdr-cta {
+    position: relative;
+  }
+  .hdr-cta::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+  .hdr-cta:active::after {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+
+  /* ===== HIDE ON SCROLL DOWN, SHOW ON SCROLL UP ===== */
+  #header {
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+  }
+  #header.hdr-hidden {
+    transform: translateY(-120%);
+    opacity: 0;
+  }
 </style>
 
 <script>
+  const header = document.getElementById('header');
   const headerInner = document.getElementById('headerInner');
 
-  // Sections with light backgrounds where header text should be dark
   const lightSections = ['about', 'projects', 'services', 'reviews'];
 
-  function updateHeader() {
-    if (!headerInner) return;
+  let lastScrollY = 0;
+  let ticking = false;
 
-    // Check which section the header is currently overlapping
+  function updateHeader() {
+    if (!headerInner || !header) return;
+
+    const currentScrollY = window.scrollY;
+
+    // --- Hide/show on scroll direction ---
+    if (currentScrollY > 200) {
+      if (currentScrollY > lastScrollY + 5) {
+        // Scrolling down
+        header.classList.add('hdr-hidden');
+      } else if (currentScrollY < lastScrollY - 5) {
+        // Scrolling up
+        header.classList.remove('hdr-hidden');
+      }
+    } else {
+      header.classList.remove('hdr-hidden');
+    }
+
+    lastScrollY = currentScrollY;
+
+    // --- Light/dark mode based on overlapping section ---
     const headerRect = headerInner.getBoundingClientRect();
     const headerMid = headerRect.top + headerRect.height / 2;
 
@@ -184,17 +365,18 @@ const {
       headerInner.classList.remove('header-light');
       headerInner.classList.add('header-dark');
     }
-
-    // Extra blur on scroll
-    if (window.scrollY > 100) {
-      headerInner.classList.add('shadow-2xl');
-    } else {
-      headerInner.classList.remove('shadow-2xl');
-    }
   }
 
-  window.addEventListener('scroll', updateHeader, { passive: true });
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        updateHeader();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  }, { passive: true });
+
   window.addEventListener('resize', updateHeader, { passive: true });
-  // Run on load
   updateHeader();
 </script>
